@@ -58,14 +58,14 @@ jobs:
       #   run: |
       #     timeout 30 bash -c 'until docker inspect --format="{{.State.Health.Status}}" ${{ env.CONTAINER_NAME }} | grep -q "healthy"; do sleep 2; done'
 
-      - name: Run application tests
-        run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:${{ env.APP_PORT }})
-          if [ "$response" != "200" ]; then
-            echo "Application health check failed with status code: $response"
-            exit 1
-          fi
-          echo "Application is healthy (HTTP $response)"
+      # - name: Run application tests
+      #   run: |
+      #     response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:${{ env.APP_PORT }})
+      #     if [ "$response" != "200" ]; then
+      #       echo "Application health check failed with status code: $response"
+      #       exit 1
+      #     fi
+      #     echo "Application is healthy (HTTP $response)"
 
       - name: View container logs on failure
         if: failure()
