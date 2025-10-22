@@ -148,6 +148,9 @@
           NODE_ENV: "{{ ENVIRONMENT }}"
           APP_VERSION: "{{ DOCKER_IMAGE_TAG }}"
           PORT: "{{ container_port }}"
+          EMAIL_USER: "{{ email_user }}"
+          EMAIL_PASSWORD: "{{ email_password}}"
+          RECEIVER_EMAIL: "{{ receiver_email }}"
         labels:
           app: "{{ DOCKER_IMAGE_NAME }}"
           environment: "{{ ENVIRONMENT }}"
