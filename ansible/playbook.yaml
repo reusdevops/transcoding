@@ -9,7 +9,7 @@
   
   vars:
     # Default values (overridden by GitHub Actions -e flags)
-    DOCKER_IMAGE_NAME: "web-app"
+    DOCKER_IMAGE_NAME: "transcoding"
     DOCKER_IMAGE_TAG: "latest"
     ENVIRONMENT: "dev"
     
