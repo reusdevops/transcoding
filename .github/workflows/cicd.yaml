@@ -2,7 +2,7 @@ name: Deploy Node.js Application
 
 on:
   push:
-    branches: [master]
+    branches: [dev, staging, master]
 
 env:
   DOCKER_IMAGE_NAME: transcoding
