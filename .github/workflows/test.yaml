@@ -1,0 +1,13 @@
+name: Testing Application
+on:
+  workflow_call:
+    inputs:
+      name:
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Printing message
+        run: echo "Hello World"
