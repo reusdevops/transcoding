@@ -10,8 +10,19 @@ env:
   APP_PORT: 4000
 
 jobs:
-  caller-workflow:
-    uses: ./.github/workflows/test.yaml
+  test-node:
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+    steps:
+      - name: running in dev or staging
+        run: echo "Testing on branch ${{ github.ref }}"
+
+  test-docker:
+    if: github.ref == 'refs/head/staging'
+    runs-on: ubuntu-latest
+    steps:
+      - name: running in staging
+        run: echo "Testing on branch ${{ github.ref }}""
 
   # test:
   #   name: Test Application
