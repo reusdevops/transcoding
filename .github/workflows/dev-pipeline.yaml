@@ -15,3 +15,13 @@ jobs:
     with:
       environment: dev
     secrets: inherit
+
+  build:
+    uses: ./.github/workflows/build.yaml
+    permissions:
+      contents: write
+    with:
+      environment: dev
+      docker_image_name: transcoding
+      doceker_image_tag: latest
+    secrets: inherit
