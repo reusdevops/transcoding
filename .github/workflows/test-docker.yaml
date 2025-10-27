@@ -20,7 +20,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: inputs.environment
+    environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -58,7 +58,7 @@ jobs:
             --health-interval=5s \
             --health-timeout=3s \
             --health-retries=3 \
-            ${{ inputs.docker_image_name }}:${{inputs.docker_image_tag}}
+            ${{ inputs.docker_image_name }}:${{ inputs.docker_image_tag }}
 
       - name: View container logs on failure
         if: failure()
@@ -70,7 +70,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/${{ inputs.docker_image_name }}:${{inputs.docker_image_tag}}
+            ${{ vars.DOCKERHUB_USERNAME }}/${{ inputs.docker_image_name }}:${{ inputs.docker_image_tag }}
             ${{ vars.DOCKERHUB_USERNAME }}/${{ inputs.docker_image_name }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
