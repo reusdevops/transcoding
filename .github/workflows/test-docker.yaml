@@ -2,8 +2,20 @@ name: Testing Application With Container
 on:
   workflow_call:
     inputs:
-      name:
+      environment:
         type: string
+      docker_image_name:
+        type: string
+        required: true
+      docker_image_tag:
+        type: string
+        required: true
+      container_name: 
+        type: string
+        required: true
+      app_port: 
+        type: string
+        required: true
 
 jobs:
   test:
@@ -30,26 +42,26 @@ jobs:
           context: .
           load: true
           tags: |
-            ${{ env.DOCKER_IMAGE_NAME }}:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.docker_image_name }}:${{ env.doceker_image_tag }}
+            ${{ vars.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }}:${{ env.doceker_image_tag }}
+            ${{ vars.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Run application container
         run: |
           docker run -d \
-            -p ${{ env.APP_PORT }}:${{ env.APP_PORT }} \
-            --name ${{ env.CONTAINER_NAME }} \
-            --health-cmd="curl -f http://localhost:${{ env.APP_PORT }} || exit 1" \
+            -p ${{ env.app_port }}:${{ env.app_port }} \
+            --name ${{ env.container_name }} \
+            --health-cmd="curl -f http://localhost:${{ env.app_port }} || exit 1" \
             --health-interval=5s \
             --health-timeout=3s \
             --health-retries=3 \
-            ${{ env.DOCKER_IMAGE_NAME }}:latest
+            ${{ env.docker_image_name }}:${{image_tag}}
 
       - name: View container logs on failure
         if: failure()
-        run: docker logs ${{ env.CONTAINER_NAME }}
+        run: docker logs ${{ env.container_name }}
 
       - name: Push to Docker Hub
         uses: docker/build-push-action@v6
@@ -57,13 +69,13 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+            ${{ vars.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }}:${{image_tag}}
+            ${{ vars.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Cleanup
         if: always()
         run: |
-          docker stop ${{ env.CONTAINER_NAME }} || true
-          docker rm ${{ env.CONTAINER_NAME }} || true
+          docker stop ${{ env.container_name }} || true
+          docker rm ${{ env.container_name }} || true
