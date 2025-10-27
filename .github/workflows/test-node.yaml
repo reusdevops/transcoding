@@ -8,7 +8,7 @@ on:
         type: string
 
 jobs:
-  test:
+  test-node:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
