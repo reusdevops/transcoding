@@ -17,11 +17,12 @@ jobs:
     secrets: inherit
 
   build:
+    needs: test-node
     uses: ./.github/workflows/build.yaml
     permissions:
       contents: write
     with:
       environment: dev
       docker_image_name: transcoding
-      doceker_image_tag: latest
+      docker_image_tag: latest
     secrets: inherit
