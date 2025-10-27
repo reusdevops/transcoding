@@ -1,7 +1,7 @@
 const express = require('express')
 const nodemailer = require('nodemailer')
 const app = express()
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3')
+const { S3Client, PutObjectCommand, HeadObjectCommand } = require('@aws-sdk/client-s3')
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
 require('dotenv').config()
 
@@ -67,7 +67,26 @@ app.get('/presigned-url', async (req, res) => {
     url: signedUrl
   })
 })
+app.post('/head-object', async (req, res) => {
+const s3 = new S3Client({
+  endpoint: process.env.CLOUDFLARE_ENDPOINT, // https://<account-id>.r2.cloudflarestorage.com
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY, // R2 Access Key ID
+    secretAccessKey: process.env.R2_SECRET_KEY, // R2 Secret Access Key
+  },
+  region: "auto",
+  signatureVersion: "v4",
+});
+const result = await s3.send(new HeadObjectCommand({
+  Bucket: "video-streaming",
+  Key: "videos/3/thumbnails/sample-3.jpg"
+}));
 
+console.log(result.Metadata); // should log { "thumbnail-id": "3" }
+return res.status(200).json({
+  data: result
+})
+})
 app.get("/health", (req, res) => {
   return res.status(200).json({
     path: "/health",
