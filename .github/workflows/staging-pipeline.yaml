@@ -1,0 +1,36 @@
+name: Staging Node.js Pipeline
+
+on:
+  pull_request:
+    branches:
+      - staging
+  push:
+    branches:
+      - staging
+
+env:
+  APP_PORT: 4000
+
+jobs:
+  test-node:
+    uses: ./.github/workflows/test-node.yaml
+    permissions:
+      contents: write
+    with:
+      environment: staging
+      docker_image_name: transcoding
+      docker_image_tag: latest
+      container_name: transcoding
+      app_port: 3000
+    secrets: inherit
+
+  test-docker:
+    uses: ./.github/workflows/test-docker.yaml
+    permissions:
+      contents: write
+    with:
+      environment: staging
+    secrets: inherit
+  
+
+  
