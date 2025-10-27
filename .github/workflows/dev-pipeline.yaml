@@ -1,26 +1,22 @@
-name: Deploy Node.js Application
+name: Dev Node.js Pipeline
 
 on:
   push:
-    branches: [ master]
+    branches: [dev]
 
 env:
-  DOCKER_IMAGE_NAME: transcoding
-  CONTAINER_NAME: transcoding-container
   APP_PORT: 4000
 
 jobs:
-  test-node:
-    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/staging'
+  test:
     uses: ./.github/workflows/test-node.yaml
-
-  test-docker:
-    if: github.ref == 'refs/heads/staging'
-    uses: ./.github/workflows/test-docker.yaml
     permissions:
       contents: write
-    with: 
-      secrets: inherit
+    with:
+      environment: dev
+    secrets: inherit
+
+ 
 
 
   # test:

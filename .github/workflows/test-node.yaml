@@ -4,6 +4,8 @@ on:
     inputs:
       name:
         type: string
+      environment:
+        type: string
 
 jobs:
   test:
