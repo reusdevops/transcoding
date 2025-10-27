@@ -42,26 +42,26 @@ jobs:
           context: .
           load: true
           tags: |
-            ${{ env.docker_image_name }}:${{ env.docker_image_tag }}
-            ${{ vars.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }}:${{ env.docker_image_tag }}
-            ${{ vars.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }}:${{ github.sha }}
+            ${{ inputs.docker_image_name }}:${{ inputs.docker_image_tag }}
+            ${{ vars.DOCKERHUB_USERNAME }}/${{ inputs.docker_image_name }}:${{ inputs.docker_image_tag }}
+            ${{ vars.DOCKERHUB_USERNAME }}/${{ inputs.docker_image_name }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Run application container
         run: |
           docker run -d \
-            -p ${{ env.app_port }}:${{ env.app_port }} \
-            --name ${{ env.container_name }} \
-            --health-cmd="curl -f http://localhost:${{ env.app_port }} || exit 1" \
+            -p ${{ inputs.app_port }}:${{ inputs.app_port }} \
+            --name ${{ inputs.container_name }} \
+            --health-cmd="curl -f http://localhost:${{ inputs.app_port }} || exit 1" \
             --health-interval=5s \
             --health-timeout=3s \
             --health-retries=3 \
-            ${{ env.docker_image_name }}:${{docker_image_tag}}
+            ${{ inputs.docker_image_name }}:${{docker_image_tag}}
 
       - name: View container logs on failure
         if: failure()
-        run: docker logs ${{ env.container_name }}
+        run: docker logs ${{ inputs.container_name }}
 
       - name: Push to Docker Hub
         uses: docker/build-push-action@v6
@@ -69,13 +69,13 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }}:${{docker_image_tag}}
-            ${{ vars.DOCKERHUB_USERNAME }}/${{ env.docker_image_name }}:${{ github.sha }}
+            ${{ vars.DOCKERHUB_USERNAME }}/${{ inputs.docker_image_name }}:${{docker_image_tag}}
+            ${{ vars.DOCKERHUB_USERNAME }}/${{ inputs.docker_image_name }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Cleanup
         if: always()
         run: |
-          docker stop ${{ env.container_name }} || true
-          docker rm ${{ env.container_name }} || true
+          docker stop ${{ inputs.container_name }} || true
+          docker rm ${{ inputs.container_name }} || true
