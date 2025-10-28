@@ -13,7 +13,7 @@ env:
 
 jobs:
   test-node:
-    uses: ./.github/workflows/test-node.yaml
+    uses: reusdevops/cicd/.github/workflows/test-node.yaml@staging
     permissions:
       contents: write
     with:
@@ -22,7 +22,7 @@ jobs:
 
   test-docker:
     needs: test-node
-    uses: ./.github/workflows/test-docker.yaml
+    uses: reusdevops/cicd/.github/workflows/test-docker.yaml@staging
     permissions:
       contents: write
     with:
