@@ -4,7 +4,7 @@ regions:
 
 filters:
   instance-state-name: running
-  tag:name: video-transcoding
+  tag:name: dev-transcoding
   tag:environment: development
   tag:application: transcoding
     
