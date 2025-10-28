@@ -26,3 +26,11 @@ jobs:
       docker_image_name: transcoding
       docker_image_tag: latest
     secrets: inherit
+
+  deploy:
+    needs: build
+    uses: ./.github/workflows/deploy.yaml
+    permissions:
+      contents: write
+    with:
+      environment: dev
