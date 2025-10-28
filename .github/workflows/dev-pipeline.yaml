@@ -9,7 +9,7 @@ env:
 
 jobs:
   test-node:
-    uses: reusdevops/cicd/.github/workflows/workflow_call/test-node.yaml
+    uses: reusdevops/cicd/.github/workflows/workflow_call/test-node.yaml@dev
     permissions:
       contents: write
     with:
