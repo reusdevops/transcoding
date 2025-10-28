@@ -1,0 +1,9 @@
+all:
+  children:
+    development:
+      hosts:
+        lightsail-dev-1:
+          ansible_host: 54.169.224.5  # Your Lightsail public IP
+      vars:
+        environment: dev
+        application: video-streaming
